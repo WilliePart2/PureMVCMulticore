@@ -1,9 +1,7 @@
-import {INotifier} from "../interfaces/INotifier";
 import {INotification} from "../interfaces/INotification";
 import {ICommandMap} from "../interfaces/IInstancesMap";
 import {Command} from "../command/Command";
 import {Observer} from "../observer/Observer";
-import {Notification} from "../notification/Notification";
 
 export class Controller {
     facadeKey: string;
@@ -16,7 +14,7 @@ export class Controller {
     }
 
     async notifyCommand (notification: INotification) {
-        let nName: string = notification.getName();
+        let nName: string = notification.name;
 
         if (this.commandsMap[nName]) {
             let command: typeof Command = this.commandsMap[nName] as typeof Command;

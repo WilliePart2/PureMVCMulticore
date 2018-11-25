@@ -1,11 +1,13 @@
 import {FacadeMember} from "../core/FacadeMember";
 import {IClientProxiesMap} from "../interfaces/IInstancesMap";
-import {Proxy} from "../Proxy";
 import {INotifier} from "../interfaces/INotifier";
 import {Notification} from "../notification/Notification";
 
 export class Mediator extends FacadeMember {
+    static NAME: string;
     clientProxiesMap: IClientProxiesMap = {} as IClientProxiesMap;
+
+    init () {}
 
     registerClientObject (key: string, object: any) {
         this.clientProxiesMap[key] = object;

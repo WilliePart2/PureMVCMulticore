@@ -1,4 +1,3 @@
-import {INotification} from "./INotification";
 import {Notification} from "../notification/Notification";
 
 export interface INotifier {

@@ -20,8 +20,8 @@ export class Observer<T> {
     }
 
     listenNotification (notificationName: string, notificationMethod: Function, notificationContext: any) {
-        let notificatinName: string = this.getObserverName(notificationName);
-        let observer: Observer<any> = Observer.getInstance<any>(notificationName);
+        let _notificationName: string = this.getObserverName(notificationName);
+        let observer: Observer<any> = Observer.getInstance<any>(_notificationName);
         observer.setNotificationMethod(notificationMethod);
         observer.setNotificationContext(notificationContext);
     }
@@ -38,8 +38,8 @@ export class Observer<T> {
         this.notificationMethod = method;
     }
 
-    async notifyObserver (notification: INotification): Promise<any> {
-        return await this.notificationMethod.call(this.notificationContext, notification);
+    notifyObserver (notification: INotification): Promise<any> {
+        return this.notificationMethod.call(this.notificationContext, notification);
     }
 
     private getObserverName (namePart: string): string {

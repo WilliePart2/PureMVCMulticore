@@ -1,5 +1,3 @@
-import {INotifier} from "../interfaces/INotifier";
-import {INotification} from "../interfaces/INotification";
 import {Mediator} from "../mediator/Mediator";
 import {IMediatorMap} from "../interfaces/IInstancesMap";
 import {Notification} from "../notification/Notification";
@@ -45,7 +43,6 @@ export class View {
     async notifyMediator (notification: Notification<any>): Promise<any> {
         let nName: string = notification.name;
 
-        if (this.mediatorsMap[nName]) {
             let handlersList: Mediator[] = [];
             this.listenNotification.forEach((listenItem: ListenItem) => {
                 if (listenItem[1] === nName) {
@@ -63,6 +60,6 @@ export class View {
             }
             let handler = handlersList.shift();
             return handler.handleNotification(notification);
-        }
+
     }
 }

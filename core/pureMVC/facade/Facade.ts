@@ -4,7 +4,6 @@ import {View} from "../view/View";
 import {IExecutable} from "../interfaces/IExecutable";
 import {INotifier} from "../interfaces/INotifier";
 import {IFacadeMap} from "../interfaces/IInstancesMap";
-import {INotification} from "../interfaces/INotification";
 import {Notification} from "../notification/Notification";
 import {Command} from "../command/Command";
 import {Mediator} from "../mediator/Mediator";
@@ -12,8 +11,7 @@ import {Proxy} from "../Proxy";
 import {Observer} from "../observer/Observer";
 
 export class Facade implements IExecutable, INotifier {
-    // static instancesMap: IFacadeMap = new Map<string, Facade>() as any;
-    static instancesMap: any;
+    static instancesMap: IFacadeMap = {} as IFacadeMap;
     facadeKey: string;
     observer: Observer<any> = null;
     controller: Controller = null;
@@ -65,25 +63,20 @@ export class Facade implements IExecutable, INotifier {
 
     }
 
-    registerCommand (key: string, command: typeof Command) {
-        this.controller.registerCommand(key, command);
+    registerCommand (triggerNotification: Notification<any>, command: typeof Command) {
+        this.controller.registerCommand(triggerNotification.name, command);
     }
 
-
-    // async sendNotification (notification: INotification): Promise<any>;
     async sendNotification <T extends Notification<any>>(notification: T, body?: T[keyof T], type?: string): Promise<any> {
         notification.body = body;
-        // return await this.controller.sendNotification(notification);
         let notificationObserver = this.observer.getListener(notification.name);
         return await notificationObserver.notifyObserver(notification);
     }
 
-    // protected createNotification <T>(name: string, body: any, type: string): Notification<T> {
-    //     return new Notification<T>(name, body, type);
-    // }
-
-    registerMediator (key: string, mediator: typeof Mediator) {
-        this.view.registerMediator(key, new mediator(this.facadeKey));
+    registerMediator (key: string, mediator: Mediator) {
+        // let mediatorInstance: Mediator = new Mediator(this.facadeKey);
+        // mediatorInstance.init();
+        this.view.registerMediator(key, mediator);
     }
 
     retrieveMediator (key: string) {

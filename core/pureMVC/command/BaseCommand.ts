@@ -10,7 +10,7 @@ export class BaseCommand extends Command {
         }
     }
 
-    async sendNotificationToModules <T extends Notification<any>>(modulesNames: string[], notification: T, notificationBody: T[keyof T], notificationType: string) {
+    async sendNotificationToModules <T extends Notification<any>>(modulesNames: string[], notification: T, notificationBody?: T[keyof T], notificationType?: string) {
         let executionPromises = modulesNames.map((moduleName: string) => {
             return this.sendNotficationToModule(moduleName, notification, notificationBody, notificationType);
         });
@@ -18,7 +18,7 @@ export class BaseCommand extends Command {
         return await Promise.all(executionPromises);
     }
 
-    async sendNotificationToAll <T extends Notification<any>>(notification: T, notificationBody: T[keyof T], notificationType: string) {
+    async sendNotificationToAll <T extends Notification<any>>(notification: T, notificationBody?: T[keyof T], notificationType?: string) {
         let facadeKeys: string [] = [];
         for (let key in Facade.instancesMap) {
             facadeKeys.push(key);

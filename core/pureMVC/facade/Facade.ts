@@ -70,12 +70,13 @@ export class Facade implements IExecutable, INotifier {
     async sendNotification <T extends Notification<any>>(notification: T, body?: T[keyof T], type?: string): Promise<any> {
         notification.body = body;
         let notificationObserver = this.observer.getListener(notification.name);
-        return await notificationObserver.notifyObserver(notification);
+        if (notificationObserver.isActive) {
+            return await notificationObserver.notifyObserver(notification);
+        }
     }
 
     registerMediator (key: string, mediator: Mediator) {
-        // let mediatorInstance: Mediator = new Mediator(this.facadeKey);
-        // mediatorInstance.init();
+        mediator.init();
         this.view.registerMediator(key, mediator);
     }
 

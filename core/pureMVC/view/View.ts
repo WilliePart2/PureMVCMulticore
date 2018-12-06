@@ -16,6 +16,11 @@ export class View {
         this.moduleWideObserver = Observer.getInstance(this.facadeKey);
     }
 
+    /**
+     * Register mediator and create facade-wide observers from it's listNotificationInterests()
+     * @param key
+     * @param instance
+     */
     registerMediator (key: string, instance: Mediator) {
         instance.facadeKey = this.facadeKey;
         this.mediatorsMap[key] = instance;

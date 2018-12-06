@@ -26,12 +26,12 @@ export class Module extends Facade {
 }
 
 class UserResponsiveComand extends BaseCommand {
-    async execute(notification: INotification): Promise<any> {
+    async execute(notification: Notification<any>): Promise<any> {
         super.execute(notification);
-        let nBody: any = notification.getBody();
+        let nBody: any = notification.body;
 
         // console.log('Executed');
-        this.sendNotficationToModule(ModuleNames.USER_MODULE, UserActions.CREATE_ACCOUNT, {username: 'Vasia'});
+        this.sendNotficationToModule(ModuleNames.USER_MODULE, UserActions.CREATE_ACCOUNT, 'Vasia');
     }
 
     doSomething () {

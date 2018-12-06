@@ -7,8 +7,9 @@ export class Observer<T> {
     notificationList: INotificationMap = {} as INotificationMap;
     private notificationContext: T;
     private notificationMethod: any;
+    isActive: boolean = false;
 
-    static getInstance<T>(key: string) {
+    static getInstance<T>(key: any) {
         if (!Observer.observersMap[key]) {
             Observer.observersMap[key] = new this<T>(key);
         }
@@ -24,6 +25,7 @@ export class Observer<T> {
         let observer: Observer<any> = Observer.getInstance<any>(_notificationName);
         observer.setNotificationMethod(notificationMethod);
         observer.setNotificationContext(notificationContext);
+        observer.isActive = true;
     }
 
     getListener (eventName: string) {

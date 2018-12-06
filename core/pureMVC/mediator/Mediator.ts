@@ -1,11 +1,13 @@
 import {FacadeMember} from "../core/FacadeMember";
-import {IClientProxiesMap} from "../interfaces/IInstancesMap";
+import {IInstancesMap} from "../interfaces/IInstancesMap";
 import {INotifier} from "../interfaces/INotifier";
 import {Notification} from "../notification/Notification";
 
-export class Mediator extends FacadeMember {
+export class Mediator<T = any> extends FacadeMember {
     static NAME: string;
-    clientProxiesMap: IClientProxiesMap = {} as IClientProxiesMap;
+    static ITEM_KEY = 0;
+    static ITEM_PAYLOAD = 1;
+    clientProxiesMap: IInstancesMap<T> = {} as IInstancesMap<T>;
 
     init () {}
 
@@ -35,5 +37,17 @@ export class Mediator extends FacadeMember {
 
     async sendNotification <T extends Notification<any>>(notification: T, body?: T[keyof T], type?: string) {
         return await (this.facade() as INotifier).sendNotification(notification, body, type);
+    }
+
+    protected findItem <T>(storage: Array<[string, T]>, itemName: string): T | null {
+        let item = storage.find((item: [string, T]) => {
+            return item[Mediator.ITEM_KEY] === itemName;
+        });
+
+        if (item) {
+            return item[Mediator.ITEM_PAYLOAD] as T;
+        }
+
+        return null;
     }
 }

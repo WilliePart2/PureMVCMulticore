@@ -3,8 +3,8 @@ import {Facade} from "../facade/Facade";
 export class FacadeMember {
     facadeKey: string;
 
-    constructor (key: string) {
-        this.facadeKey = key;
+    constructor (facadeKey: string) {
+            this.facadeKey = facadeKey;
     }
 
     facade (): Facade {

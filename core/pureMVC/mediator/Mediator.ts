@@ -7,7 +7,12 @@ export class Mediator<T = any> extends FacadeMember {
     static NAME: string;
     static ITEM_KEY = 0;
     static ITEM_PAYLOAD = 1;
+    protected mediatorKey: string;
     clientProxiesMap: IInstancesMap<T> = {} as IInstancesMap<T>;
+
+    setMediatorKey (mediatorKey: string): void {
+        this.mediatorKey = mediatorKey;
+    }
 
     init () {}
 

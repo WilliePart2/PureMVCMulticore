@@ -76,6 +76,7 @@ export class Facade implements IExecutable, INotifier {
     }
 
     registerMediator (key: string, mediator: Mediator) {
+        mediator.setMediatorKey(key);
         mediator.init();
         this.view.registerMediator(key, mediator);
     }

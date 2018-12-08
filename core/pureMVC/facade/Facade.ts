@@ -89,7 +89,7 @@ export class Facade implements IExecutable, INotifier {
         this.view.dropMediator(key);
     }
 
-    registerProxy (key: string, proxy: typeof Proxy, initialData: any): void {
+    registerProxy (key: string, proxy: typeof Proxy, initialData?: any): void {
         this.model.registerProxy(key, new proxy(this.facadeKey, initialData));
     }
 

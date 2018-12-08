@@ -67,4 +67,13 @@ export class View {
             return handler.handleNotification(notification);
 
     }
+
+    dropMediator (key: string): void {
+        let mediator: Mediator = this.retrieveMediator(key);
+
+        if (mediator) {
+            mediator.onDestroy();
+            this.mediatorsMap[key] = null;
+        }
+    }
 }

@@ -14,22 +14,24 @@ export class Mediator<T = any> extends FacadeMember {
         this.mediatorKey = mediatorKey;
     }
 
-    init () {}
+    onInit (): void {}
 
-    registerClientObject (key: string, object: any) {
+    onDestroy (): void {}
+
+    registerClientObject (key: string, object: T): void {
         this.clientProxiesMap[key] = object;
     }
 
-    retrieveClientObject (key: string) {
+    retrieveClientObject (key: string): T {
         return this.clientProxiesMap[key];
     }
 
-    dropClientObject (key: string): void {
-        return this.clientProxiesMap[key] = null;
+    dropClientObject (key :string): void {
+        this.clientProxiesMap[key] = null;
     }
 
     /**
-     * Mediator cat listen inner and outer notification
+     * Mediator can listen inner and outer notification
      * We could build relation as Notifier -> Mediator
      * @abstract
      */
@@ -48,6 +50,11 @@ export class Mediator<T = any> extends FacadeMember {
         return await (this.facade() as INotifier).sendNotification(notification, body, type);
     }
 
+    /**
+     * @deprecated - used more simple way to communicate between mediator and ui
+     * @param storage
+     * @param itemName
+     */
     protected findItem <T>(storage: Array<[string, T]>, itemName: string): T | null {
         let item = storage.find((item: [string, T]) => {
             return item[Mediator.ITEM_KEY] === itemName;

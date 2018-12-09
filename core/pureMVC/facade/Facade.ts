@@ -18,7 +18,7 @@ export class Facade implements IExecutable, INotifier {
     model: Model = null;
     view: View = null;
 
-    static getInstance (facadeKey: string) {
+    static getInstance (facadeKey: string): Facade {
         if (Facade.instancesMap[facadeKey]) {
             return Facade.instancesMap[facadeKey];
         }
@@ -26,7 +26,7 @@ export class Facade implements IExecutable, INotifier {
         return Facade.instancesMap[facadeKey];
     }
 
-    static hasCore (facadeKey: string) {
+    static hasCore (facadeKey: string): boolean {
         return !!this.instancesMap[facadeKey];
     }
 
@@ -63,7 +63,7 @@ export class Facade implements IExecutable, INotifier {
 
     }
 
-    registerCommand (triggerNotification: Notification<any>, command: typeof Command) {
+    registerCommand (triggerNotification: Notification<any>, command: typeof Command): void {
         this.controller.registerCommand(triggerNotification.name, command);
     }
 
@@ -75,21 +75,25 @@ export class Facade implements IExecutable, INotifier {
         }
     }
 
-    registerMediator (key: string, mediator: Mediator) {
+    registerMediator (key: string, mediator: Mediator): void {
         mediator.setMediatorKey(key);
         mediator.onInit();
         this.view.registerMediator(key, mediator);
     }
 
-    retrieveMediator (key: string) {
+    retrieveMediator (key: string): Mediator {
         return this.view.retrieveMediator(key);
     }
 
-    registerProxy (key: string, proxy: typeof Proxy, initialData?: any) {
+    dropMediator (key: string): void {
+        this.view.dropMediator(key);
+    }
+
+    registerProxy (key: string, proxy: typeof Proxy, initialData?: any): void {
         this.model.registerProxy(key, new proxy(this.facadeKey, initialData));
     }
 
-    retrieveProxy (key: string) {
+    retrieveProxy (key: string): Proxy {
         return this.model.retrieveProxy(key);
     }
 }

@@ -24,6 +24,10 @@ export class Mediator<T = any> extends FacadeMember {
         return this.clientProxiesMap[key];
     }
 
+    dropClientObject (key: string): void {
+        return this.clientProxiesMap[key] = null;
+    }
+
     /**
      * Mediator cat listen inner and outer notification
      * We could build relation as Notifier -> Mediator

@@ -77,7 +77,7 @@ export class Facade implements IExecutable, INotifier {
 
     registerMediator (key: string, mediator: Mediator) {
         mediator.setMediatorKey(key);
-        mediator.init();
+        mediator.onInit();
         this.view.registerMediator(key, mediator);
     }
 
@@ -85,7 +85,7 @@ export class Facade implements IExecutable, INotifier {
         return this.view.retrieveMediator(key);
     }
 
-    registerProxy (key: string, proxy: typeof Proxy, initialData: any) {
+    registerProxy (key: string, proxy: typeof Proxy, initialData?: any) {
         this.model.registerProxy(key, new proxy(this.facadeKey, initialData));
     }
 

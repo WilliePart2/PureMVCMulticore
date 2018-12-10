@@ -9,6 +9,7 @@ import {Command} from "../command/Command";
 import {Mediator} from "../mediator/Mediator";
 import {Proxy} from "../Proxy";
 import {Observer} from "../observer/Observer";
+import {getValue} from "../../../../src/game.core/utils/get.value";
 
 export class Facade implements IExecutable, INotifier {
     static instancesMap: IFacadeMap = {} as IFacadeMap;
@@ -70,7 +71,7 @@ export class Facade implements IExecutable, INotifier {
     async sendNotification <T extends Notification<any>>(notification: T, body?: T[keyof T], type?: string): Promise<any> {
         let _notification: Notification<T> = new Notification(
             notification.name,
-            body || notification.body,
+            getValue(body || notification.body),
             type || notification.type
         );
         let notificationObserver = this.observer.getListener(_notification.name);

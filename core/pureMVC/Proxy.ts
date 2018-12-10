@@ -1,4 +1,6 @@
 import {FacadeMember} from "./core/FacadeMember";
+import { Facade } from "./facade/Facade";
+import { Notification } from "./notification/Notification";
 
 export class Proxy extends FacadeMember {
     /**

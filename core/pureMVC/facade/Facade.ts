@@ -68,10 +68,14 @@ export class Facade implements IExecutable, INotifier {
     }
 
     async sendNotification <T extends Notification<any>>(notification: T, body?: T[keyof T], type?: string): Promise<any> {
-        notification.body = body;
-        let notificationObserver = this.observer.getListener(notification.name);
+        let _notification: Notification<T> = new Notification(
+            notification.name,
+            body || notification.body,
+            type || notification.type
+        );
+        let notificationObserver = this.observer.getListener(_notification.name);
         if (notificationObserver.isActive) {
-            return await notificationObserver.notifyObserver(notification);
+            return await notificationObserver.notifyObserver(_notification);
         }
     }
 

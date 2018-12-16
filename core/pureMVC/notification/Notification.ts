@@ -1,5 +1,5 @@
 import {INotification} from "../interfaces/INotification";
-import { getValue } from "../../../../src/game.core/utils/get.value";
+import { getValue } from "../utils/get.value";
 
 /**
  * Typed notifications implemented as singleton.

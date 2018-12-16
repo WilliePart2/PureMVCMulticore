@@ -68,9 +68,10 @@ export class Facade implements IExecutable, INotifier {
     }
 
     async sendNotification <T extends Notification<any>>(notification: T, body?: T[keyof T], type?: string): Promise<any> {
-        notification.body = body;
-        let notificationObserver = this.observer.getListener(notification.name);
-        return await notificationObserver.notifyObserver(notification);
+        let notificationInstance: T = Object.create(notification); // It should create new instance for every notification. Useful for nodeJS =)
+        notificationInstance.body = body;
+        let notificationObserver = this.observer.getListener(notificationInstance.name);
+        return await notificationObserver.notifyObserver(notificationInstance);
     }
 
     registerMediator (key: string, mediator: Mediator) {

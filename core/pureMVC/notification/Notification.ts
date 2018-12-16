@@ -1,4 +1,5 @@
 import {INotification} from "../interfaces/INotification";
+import { getValue } from "../../../../src/game.core/utils/get.value";
 
 /**
  * Typed notifications implemented as singleton.
@@ -36,19 +37,7 @@ export class Notification<T> implements INotification {
 
     constructor (name: string, body: T, type: string) {
         this._name = name;
-        this._body = body;
+        this._body = getValue(body);
         this._type = type;
     }
-
-    // getBody(): any {
-    //     return this.body;
-    // }
-    //
-    // getName(): string {
-    //     return this.name;
-    // }
-    //
-    // getType(): string {
-    //     return this.type;
-    // }
 }

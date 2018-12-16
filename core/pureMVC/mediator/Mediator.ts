@@ -1,24 +1,37 @@
 import {FacadeMember} from "../core/FacadeMember";
-import {IClientProxiesMap} from "../interfaces/IInstancesMap";
+import {IInstancesMap} from "../interfaces/IInstancesMap";
 import {INotifier} from "../interfaces/INotifier";
 import {Notification} from "../notification/Notification";
 
-export class Mediator extends FacadeMember {
+export class Mediator<T = any> extends FacadeMember {
     static NAME: string;
-    clientProxiesMap: IClientProxiesMap = {} as IClientProxiesMap;
+    static ITEM_KEY = 0;
+    static ITEM_PAYLOAD = 1;
+    protected mediatorKey: string;
+    clientProxiesMap: IInstancesMap<T> = {} as IInstancesMap<T>;
 
-    init () {}
+    setMediatorKey (mediatorKey: string): void {
+        this.mediatorKey = mediatorKey;
+    }
 
-    registerClientObject (key: string, object: any) {
+    onInit (): void {}
+
+    onDestroy (): void {}
+
+    registerClientObject (key: string, object: T): void {
         this.clientProxiesMap[key] = object;
     }
 
-    retrieveClientObject (key: string) {
+    retrieveClientObject (key: string): T {
         return this.clientProxiesMap[key];
     }
 
+    dropClientObject (key :string): void {
+        this.clientProxiesMap[key] = null;
+    }
+
     /**
-     * Mediator cat listen inner and outer notification
+     * Mediator can listen inner and outer notification
      * We could build relation as Notifier -> Mediator
      * @abstract
      */
@@ -35,5 +48,22 @@ export class Mediator extends FacadeMember {
 
     async sendNotification <T extends Notification<any>>(notification: T, body?: T[keyof T], type?: string) {
         return await (this.facade() as INotifier).sendNotification(notification, body, type);
+    }
+
+    /**
+     * @deprecated - used more simple way to communicate between mediator and ui
+     * @param storage
+     * @param itemName
+     */
+    protected findItem <T>(storage: Array<[string, T]>, itemName: string): T | null {
+        let item = storage.find((item: [string, T]) => {
+            return item[Mediator.ITEM_KEY] === itemName;
+        });
+
+        if (item) {
+            return item[Mediator.ITEM_PAYLOAD] as T;
+        }
+
+        return null;
     }
 }

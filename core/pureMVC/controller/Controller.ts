@@ -2,6 +2,7 @@ import {INotification} from "../interfaces/INotification";
 import {ICommandMap} from "../interfaces/IInstancesMap";
 import {Command} from "../command/Command";
 import {Observer} from "../observer/Observer";
+import {Notification} from "../notification/Notification";
 
 export class Controller {
     facadeKey: string;
@@ -13,13 +14,13 @@ export class Controller {
         this.moduleWideObserver = Observer.getInstance<Controller>(this.facadeKey);
     }
 
-    async notifyCommand (notification: INotification) {
+    async notifyCommand (notification: Notification<any>) {
         let nName: string = notification.name;
 
         if (this.commandsMap[nName]) {
             let command: typeof Command = this.commandsMap[nName] as typeof Command;
             let commandInstance: Command = new command(this.facadeKey);
-            return await commandInstance.execute(notification as INotification);
+            return await commandInstance.execute(notification);
         }
     }
 

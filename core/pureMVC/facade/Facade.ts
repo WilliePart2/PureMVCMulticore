@@ -9,6 +9,7 @@ import {Command} from "../command/Command";
 import {Mediator} from "../mediator/Mediator";
 import {Proxy} from "../Proxy";
 import {Observer} from "../observer/Observer";
+import {getValue} from "../../../../src/game.core/utils/get.value";
 
 export class Facade implements IExecutable, INotifier {
     static instancesMap: IFacadeMap = {} as IFacadeMap;
@@ -18,7 +19,7 @@ export class Facade implements IExecutable, INotifier {
     model: Model = null;
     view: View = null;
 
-    static getInstance (facadeKey: string) {
+    static getInstance (facadeKey: string): Facade {
         if (Facade.instancesMap[facadeKey]) {
             return Facade.instancesMap[facadeKey];
         }
@@ -26,7 +27,7 @@ export class Facade implements IExecutable, INotifier {
         return Facade.instancesMap[facadeKey];
     }
 
-    static hasCore (facadeKey: string) {
+    static hasCore (facadeKey: string): boolean {
         return !!this.instancesMap[facadeKey];
     }
 
@@ -63,32 +64,41 @@ export class Facade implements IExecutable, INotifier {
 
     }
 
-    registerCommand (triggerNotification: Notification<any>, command: typeof Command) {
+    registerCommand (triggerNotification: Notification<any>, command: typeof Command): void {
         this.controller.registerCommand(triggerNotification.name, command);
     }
 
     async sendNotification <T extends Notification<any>>(notification: T, body?: T[keyof T], type?: string): Promise<any> {
-        let notificationInstance: T = Object.create(notification); // It should create new instance for every notification. Useful for nodeJS =)
-        notificationInstance.body = body;
-        let notificationObserver = this.observer.getListener(notificationInstance.name);
-        return await notificationObserver.notifyObserver(notificationInstance);
+        let _notification: Notification<T> = new Notification(
+            notification.name,
+            getValue(body || notification.body),
+            type || notification.type
+        );
+        let notificationObserver = this.observer.getListener(_notification.name);
+        if (notificationObserver.isActive) {
+            return await notificationObserver.notifyObserver(_notification);
+        }
     }
 
-    registerMediator (key: string, mediator: Mediator) {
-        // let mediatorInstance: Mediator = new Mediator(this.facadeKey);
-        // mediatorInstance.init();
+    registerMediator (key: string, mediator: Mediator): void {
+        mediator.setMediatorKey(key);
+        mediator.onInit();
         this.view.registerMediator(key, mediator);
     }
 
-    retrieveMediator (key: string) {
+    retrieveMediator (key: string): Mediator {
         return this.view.retrieveMediator(key);
     }
 
-    registerProxy (key: string, proxy: typeof Proxy, initialData: any) {
+    dropMediator (key: string): void {
+        this.view.dropMediator(key);
+    }
+
+    registerProxy (key: string, proxy: typeof Proxy, initialData?: any): void {
         this.model.registerProxy(key, new proxy(this.facadeKey, initialData));
     }
 
-    retrieveProxy (key: string) {
+    retrieveProxy (key: string): Proxy {
         return this.model.retrieveProxy(key);
     }
 }

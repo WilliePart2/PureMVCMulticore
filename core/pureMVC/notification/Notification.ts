@@ -35,7 +35,7 @@ export class Notification<T> implements INotification {
         return new this<T>(notificationName, notificationBody, notificationType);
     }
 
-    constructor (name: string, body: T, type: string) {
+    constructor (name: string, body?: T, type?: string) {
         this._name = name;
         this._body = getValue(body);
         this._type = type;

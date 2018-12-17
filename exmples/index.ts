@@ -31,7 +31,7 @@ class UserResponsiveComand extends BaseCommand {
         let nBody: any = notification.body;
 
         // console.log('Executed');
-        this.sendNotficationToModule(ModuleNames.USER_MODULE, UserActions.CREATE_ACCOUNT, 'Vasia');
+        // this.sendNotficationToModule(ModuleNames.USER_MODULE, UserActions.CREATE_ACCOUNT, 'Vasia');
     }
 
     doSomething () {

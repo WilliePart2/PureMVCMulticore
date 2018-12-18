@@ -9,6 +9,6 @@ export class Command extends FacadeMember implements IExecutable {
      * @param notification
      */
     async execute (notification: Notification<any>): Promise<any> {
-
+        return null;
     }
 }

@@ -6,7 +6,7 @@ import { getValue } from "../utils/get.value";
  * Notification type determined by notification body type and functions which works with notification must capture type from notification through generic
  * Example <T>(notification: T, notificationBody?: T[keyof T], notificationType?: string)
  */
-export class Notification<T> implements INotification {
+export class Notification<T extends any> implements INotification {
     private readonly _name: string;
     get name (): string {
         return this._name;
